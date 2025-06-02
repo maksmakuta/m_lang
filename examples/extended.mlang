@@ -1,0 +1,24 @@
+// short comment
+
+/* long
+   comment */
+
+import "std" // import in progress but support is included (for future)
+
+fn abs(val : i32) : i32{
+    if( val < 0){
+        return -val
+    } else {
+        return val
+    }
+}
+
+fn printValue(val : i32){
+    println("Absolute value for {val} is {abs(val)}")
+}
+
+fn main(){
+    let integer : i32 = 0
+    input("Enter integer: ",integer)
+    printValue(integer)
+}

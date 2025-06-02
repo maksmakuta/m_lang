@@ -1,0 +1,46 @@
+import "std.vec" // maybe it changed in future...
+
+interface Shape{
+    fn getArea() : f32
+}
+
+class Circle : Shape{
+
+    Circle(r : i32){
+        this.radius = r
+    }
+
+    override fn getArea() : f32{
+        return Math.PI * this.radius
+    }
+
+    private let radius = 0F
+}
+
+class Rect : Shape{
+
+    Rect(w : i32, h : i32){
+        this.width = w
+        this.height = h
+    }
+
+    override fn getArea() : f32{
+        return this.width * this.height
+    }
+
+    private :
+        let width = 0
+        let height = 0
+}
+
+fn main(){
+    let shapes = vec<Shape>{
+        Circle(5),
+        Rect(1,3),
+        Rect(9,6),
+        Circle(7)
+    }
+    for(i in 0 .. 3){
+        println("Area for shapes[{i}] = {shapes[i].getArea()}")
+    }
+}

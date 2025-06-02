@@ -1,6 +1,66 @@
 #include "mlang/Lexer.hpp"
 
+#include <map>
+
 namespace mlang {
+
+    static std::map<std::string, Token> keywords{
+        {"let"      ,Token::Let      },
+        {"fn"       ,Token::Function },
+        {"class"    ,Token::Class    },
+        {"interface",Token::Interface},
+        {"abstract" ,Token::Abstract },
+        {"if"       ,Token::If       },
+        {"else"     ,Token::Else     },
+        {"match"    ,Token::Match    },
+        {"return"   ,Token::Return   },
+        {"null"     ,Token::Null     },
+        {"true"     ,Token::True     },
+        {"false"    ,Token::False    },
+    };
+
+    static std::map<std::string, Token> operators{
+        {"+",   Token::Plus                 },
+        {"-",   Token::Minus                },
+        {"/",   Token::Divide               },
+        {"*",   Token::Multiply             },
+        {"%",   Token::Mod                  },
+        {"!",   Token::Not                  },
+        {"|",   Token::BitwiseOr            },
+        {"&",   Token::BitwiseAnd           },
+        {"^",   Token::Xor                  },
+        {"||",  Token::Or                   },
+        {"&&",  Token::And                  },
+        {"~",   Token::Invert               },
+        {"<<",  Token::ShiftLeft            },
+        {">>",  Token::ShiftRight           },
+        {"==",  Token::Equal                },
+        {"<",   Token::Less                 },
+        {">",   Token::Greater              },
+        {"+=",  Token::PlusEqual            },
+        {"-=",  Token::MinusEqual           },
+        {"/=",  Token::DivideEqual          },
+        {"*=",  Token::MultiplyEqual        },
+        {"%=",  Token::ModEqual             },
+        {"|=",  Token::OrEqual              },
+        {"&=",  Token::AndEqual             },
+        {"^=",  Token::XorEqual             },
+        {"~=",  Token::InvertEqual          },
+        {"<<=", Token::ShiftLeftEqual       },
+        {">>=", Token::ShiftRightEqual      },
+        {"!=",  Token::NotEqual             },
+        {"<=",  Token::LessEqual            },
+        {">=",  Token::GreaterEqual         },
+        {".",   Token::Dot                  },
+        {":",   Token::Colon                },
+        {",",   Token::Comma                },
+        {"(",   Token::BracketStart         },
+        {")",   Token::BracketEnd           },
+        {"[",   Token::BracketSquareStart   },
+        {"]",   Token::BracketSquareEnd     },
+        {"{",   Token::BracketCurlyStart    },
+        {"}",   Token::BracketCurlyEnd      },
+    };
 
     void Position::newline() {
         line++;
@@ -35,11 +95,8 @@ namespace mlang {
         while (std::isalnum(peek()) || peek() == '_') advance();
         std::string text = m_buffer.substr(start, pointer - start);
 
-        if (text == "fn") {
-            return Lexem(Token::Function, text, pos);
-        }
-        if (text == "let") {
-            return Lexem(Token::Let, text, pos);
+        if (keywords.contains(text)) {
+            return Lexem(keywords[text], text, pos);
         }
 
         return Lexem(Token::Identifier, text, pos);
@@ -62,41 +119,22 @@ namespace mlang {
             if (peek() == '\n') pos.newline();
             advance();
         }
-        std::string content = m_buffer.substr(start, pointer - start);
+        const std::string content = m_buffer.substr(start, pointer - start);
         if (peek() == '"') advance();
         return Lexem(Token::String, content, pos);
     }
 
     Lexem Lexer::lexSymbol(){
-        const char c = advance();
-        Token type = Token::Unknown;
-        switch (c) {
-            case ':':
-                type = Token::Colon;
-                break;
-            case '(':
-                type = Token::BracketStart;
-                break;
-            case ')':
-                type = Token::BracketEnd;
-                break;
-            case '{':
-                type = Token::BracketCurlyStart;
-                break;
-            case '}':
-                type = Token::BracketCurlyEnd;
-                break;
-            case '[':
-                type = Token::BracketSquareStart;
-                break;
-            case ']':
-                type = Token::BracketSquareEnd;
-                break;
-            default:
-                type = Token::Unknown;
-                break;
+        for (const auto len : {3,2,1}) {
+            if (pointer + len <= m_buffer.size()) {
+                if (std::string content = m_buffer.substr(pointer, len); operators.contains(content)) {
+                    pointer += len;
+                    return Lexem( operators[content], content, pos);
+                }
+            }
         }
-        return Lexem(type, std::string(1, c), pos);
+
+        return Lexem(Token::Unknown, "", pos);
     }
 
     char Lexer::peek() const{
@@ -117,12 +155,22 @@ namespace mlang {
 
     void Lexer::skipWhitespace(){
         while (true) {
-            const char c = peek();
+            char c = peek();
             if (c == ' ' || c == '\t' || c == '\r') {
                 advance();
             } else if (c == '\n') {
                 pos.newline();
                 advance();
+            } else if (c == '/' && m_buffer[pointer + 1] == '/') {
+                while (peek() != '\n' && peek() != '\0') advance();
+            } else if (c == '/' && m_buffer[pointer + 1] == '*') {
+                advance(); advance(); // skip /*
+                while (!(peek() == '*' && m_buffer[pointer + 1] == '/') && peek() != '\0') {
+                    if (peek() == '\n') pos.newline();
+                    advance();
+                }
+                if (peek() == '*') advance(); // *
+                if (peek() == '/') advance(); // /
             } else {
                 break;
             }
