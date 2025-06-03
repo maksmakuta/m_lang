@@ -13,6 +13,10 @@ add_executable(mcc
         src/Token.cpp
         src/Utils.cpp
         src/main.cpp
+        include/mlang/AST.hpp
+        include/mlang/Parser.hpp
+        include/mlang/ASTVisitor.hpp
+        src/Parser.cpp
 )
 
 target_include_directories(mcc PUBLIC include)

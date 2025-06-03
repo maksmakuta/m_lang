@@ -6,7 +6,7 @@
 ### What's working?
 
  - [x] Lexing
- - [ ] Parsing
+ - [ ] Parsing (in progress)
  - [ ] Make AST
  - [ ] Running code
 

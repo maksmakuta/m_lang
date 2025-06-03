@@ -67,6 +67,9 @@ namespace mlang {
         INSERT_ELEMENT(Token::String);
         INSERT_ELEMENT(Token::Number);
         INSERT_ELEMENT(Token::Character);
+        INSERT_ELEMENT(Token::While);
+        INSERT_ELEMENT(Token::For);
+        INSERT_ELEMENT(Token::Loop);
         INSERT_ELEMENT(Token::Unknown);
 
 #undef INSERT_ELEMENT

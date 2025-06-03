@@ -4,6 +4,11 @@ interface Shape{
     fn getArea() : f32
 }
 
+/* or
+abstract class Shape{
+    abstract fn getArea() : f32
+}*/
+
 class Circle : Shape{
 
     Circle(r : i32){
@@ -40,7 +45,7 @@ fn main(){
         Rect(9,6),
         Circle(7)
     }
-    for(i in 0 .. 3){
+    for(i in range(shapes)){
         println("Area for shapes[{i}] = {shapes[i].getArea()}")
     }
 }

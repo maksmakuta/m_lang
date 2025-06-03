@@ -1,0 +1,23 @@
+import "std.math"
+
+// simple generics
+
+fn<T> add(a : T, b : T) : T{
+    return a + b
+}
+
+fn<T> fact(i : T) : T{
+    if(i <= 1){
+        return 1
+    }else{
+        return i * fact(i - 1)
+    }
+}
+
+// generics with params
+
+struct Item<T>{
+    data : T
+}
+
+fn<T : Item<T>>

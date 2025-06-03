@@ -20,6 +20,9 @@ namespace mlang {
         {"null"     ,Token::Null     },
         {"true"     ,Token::True     },
         {"false"    ,Token::False    },
+        {"loop"     ,Token::Loop     },
+        {"while"    ,Token::While    },
+        {"for"      ,Token::For      },
     };
 
     static std::map<std::string, Token> operators{
