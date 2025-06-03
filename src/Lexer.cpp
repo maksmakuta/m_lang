@@ -1,5 +1,6 @@
 #include "mlang/Lexer.hpp"
 
+#include <iostream>
 #include <map>
 
 namespace mlang {
@@ -60,7 +61,12 @@ namespace mlang {
         {"]",   Token::BracketSquareEnd     },
         {"{",   Token::BracketCurlyStart    },
         {"}",   Token::BracketCurlyEnd      },
+        {"=",   Token::Set                  },
     };
+
+    bool isPunkt(const char c) {
+        return std::string("~!+-*/%^&|<>{}[]()=:,.").find(c) != std::string::npos;
+    }
 
     void Position::newline() {
         line++;
@@ -80,7 +86,7 @@ namespace mlang {
                 tokens.push_back(lexNumber());
             } else if (c == '"') {
                 tokens.push_back(lexString());
-            } else if (std::ispunct(c)) {
+            } else if (isPunkt(c)) {
                 tokens.push_back(lexSymbol());
             } else {
                 advance();
@@ -125,16 +131,10 @@ namespace mlang {
     }
 
     Lexem Lexer::lexSymbol(){
-        for (const auto len : {3,2,1}) {
-            if (pointer + len <= m_buffer.size()) {
-                if (std::string content = m_buffer.substr(pointer, len); operators.contains(content)) {
-                    pointer += len;
-                    return Lexem( operators[content], content, pos);
-                }
-            }
-        }
-
-        return Lexem(Token::Unknown, "", pos);
+        const size_t start = pointer;
+        advance();
+        const std::string content = m_buffer.substr(start, pointer - start);
+        return Lexem(operators[content], content, pos);
     }
 
     char Lexer::peek() const{
@@ -142,6 +142,7 @@ namespace mlang {
     }
 
     char Lexer::advance(){
+        pos.column++;
         return pointer < m_buffer.size() ? m_buffer[pointer++] : '\0';
     }
 

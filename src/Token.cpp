@@ -53,6 +53,7 @@ namespace mlang {
         INSERT_ELEMENT(Token::LessEqual);
         INSERT_ELEMENT(Token::GreaterEqual);
         INSERT_ELEMENT(Token::Dot);
+        INSERT_ELEMENT(Token::Set);
         INSERT_ELEMENT(Token::Colon);
         INSERT_ELEMENT(Token::Comma);
         INSERT_ELEMENT(Token::BracketStart);

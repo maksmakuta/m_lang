@@ -1,24 +1,35 @@
-// short comment
+import "std.math"
+import "std.limits"
 
-/* long
-   comment */
-
-import "std" // import in progress but support is included (for future)
-
-fn abs(val : i32) : i32{
-    if( val < 0){
-        return -val
-    } else {
-        return val
-    }
+struct vec2<T>{
+    T x,
+    T y
 }
 
-fn printValue(val : i32){
-    println("Absolute value for {val} is {abs(val)}")
+fn<T> vec2<T>::add(a : vec2<T>,b : vec2<T>) : vec2<T>{
+    return vec2<T>{a.x + b.x, a.y + b.y}
 }
 
+fn<T> vec2<T>::toString(v:vec2<T>) : str{
+    return "vec2<{toString(T)}>({v.x}, {v.y})"
+}
+
+fn<T> rand(min : T = 0, max : T = 1) : vec2<T>{
+    let random = Random<T>(min,max)
+    return vec2<T>{random.next(),random.next()}
+}
+
+
+/*
+    starting function
+*/
 fn main(){
-    let integer : i32 = 0
-    input("Enter integer: ",integer)
-    printValue(integer)
+    let v1 : vec2<i32> = rand(min<i32>(),max<i32>())
+    let v2 : vec2<i32> = rand(min<i32>(),max<i32>())
+    let v3 = v1 + v2 // or use v1.add(v2)
+
+    println("v1 = {v1}")
+    println("v2 = {v2}")
+    println("v3 = {v3}")
+
 }

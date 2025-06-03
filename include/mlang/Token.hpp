@@ -25,6 +25,7 @@ namespace mlang {
         Let,
         If,
 
+        Set,
         Plus,
         Minus,
         Divide,
