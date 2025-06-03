@@ -14,9 +14,11 @@ namespace mlang {
         INSERT_ELEMENT(Token::Abstract);
         INSERT_ELEMENT(Token::Function);
         INSERT_ELEMENT(Token::Import);
+        INSERT_ELEMENT(Token::Struct);
         INSERT_ELEMENT(Token::Return);
         INSERT_ELEMENT(Token::Class);
         INSERT_ELEMENT(Token::Match);
+        INSERT_ELEMENT(Token::Const);
         INSERT_ELEMENT(Token::False);
         INSERT_ELEMENT(Token::Else);
         INSERT_ELEMENT(Token::Null);
@@ -71,7 +73,7 @@ namespace mlang {
         return result;
     }
 
-    std::string toString(Token value) {
+    std::string toString(const Token value) {
         return strings()[value];
     }
 

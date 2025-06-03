@@ -1,31 +1,30 @@
 import "std.math"
 import "std.limits"
 
-struct vec2<T>{
-    T x,
-    T y
+struct vec2{
+    x : i32,
+    y : i32
 }
 
-fn<T> vec2<T>::add(a : vec2<T>,b : vec2<T>) : vec2<T>{
-    return vec2<T>{a.x + b.x, a.y + b.y}
+fn vec2::add(a : vec2,b : vec2) : vec2{
+    return vec2{a.x + b.x, a.y + b.y}
 }
 
-fn<T> vec2<T>::toString(v:vec2<T>) : str{
-    return "vec2<{toString(T)}>({v.x}, {v.y})"
+fn vec2::toString(v : vec2) : str{
+    return "vec2({v.x}, {v.y})"
 }
 
-fn<T> rand(min : T = 0, max : T = 1) : vec2<T>{
-    let random = Random<T>(min,max)
-    return vec2<T>{random.next(),random.next()}
+fn rand(min : i32 = 0, max : i32 = 1) : vec2{
+    let random = Random<i32>(min,max)
+    return vec2{random.next(),random.next()}
 }
-
 
 /*
     starting function
 */
 fn main(){
-    let v1 : vec2<i32> = rand(min<i32>(),max<i32>())
-    let v2 : vec2<i32> = rand(min<i32>(),max<i32>())
+    const let v1 : vec2 = rand(min<i32>(),max<i32>())
+    const let v2 : vec2 = rand(min<i32>(),max<i32>())
     let v3 = v1 + v2 // or use v1.add(v2)
 
     println("v1 = {v1}")
