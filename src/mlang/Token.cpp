@@ -70,6 +70,12 @@ namespace mlang {
         INSERT_ELEMENT(Token::While);
         INSERT_ELEMENT(Token::For);
         INSERT_ELEMENT(Token::Loop);
+        INSERT_ELEMENT(Token::Pub);
+        INSERT_ELEMENT(Token::Priv);
+        INSERT_ELEMENT(Token::Prot);
+        INSERT_ELEMENT(Token::Enum);
+        INSERT_ELEMENT(Token::This);
+        INSERT_ELEMENT(Token::Constructor);
         INSERT_ELEMENT(Token::Unknown);
 
 #undef INSERT_ELEMENT

@@ -10,6 +10,7 @@ namespace mlang {
         EndOfFile,
 
         Type,
+        Constructor,
         Identifier,
         Interface,
         Abstract,
@@ -22,8 +23,10 @@ namespace mlang {
         While,
         False,
         Const,
+        Enum,
         Else,
         Null,
+        This,
         Loop,
         For,
         True,
@@ -74,6 +77,10 @@ namespace mlang {
         BracketSquareEnd,
         BracketCurlyStart,
         BracketCurlyEnd,
+
+        Pub,
+        Priv,
+        Prot,
 
         String,
         Number,
