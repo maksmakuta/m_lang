@@ -73,6 +73,8 @@ namespace mlang {
         INSERT_ELEMENT(Token::Pub);
         INSERT_ELEMENT(Token::Priv);
         INSERT_ELEMENT(Token::Prot);
+        INSERT_ELEMENT(Token::Next);
+        INSERT_ELEMENT(Token::Stop);
         INSERT_ELEMENT(Token::Enum);
         INSERT_ELEMENT(Token::This);
         INSERT_ELEMENT(Token::Constructor);

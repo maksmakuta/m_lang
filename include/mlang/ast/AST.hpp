@@ -3,6 +3,7 @@
 
 #include <optional>
 #include <variant>
+#include <memory>
 #include <vector>
 
 #include "mlang/Token.hpp"
@@ -52,33 +53,33 @@ namespace mlang {
 
     struct ExprUnary {
         Token op = Token::Unknown;
-        Expression operand;
+        std::shared_ptr<Expression> operand;
     };
 
     struct ExprBinary {
         Token op = Token::Unknown;
-        Expression left;
-        Expression right;
+        std::shared_ptr<Expression> left;
+        std::shared_ptr<Expression> right;
     };
 
     struct ExprCall {
-        Expression callee;
+        std::shared_ptr<Expression> callee;
         std::vector<Expression> args;
     };
 
     struct ExprGet {
-        Expression object;
+        std::shared_ptr<Expression> object;
         std::string field;
     };
 
     struct ExprSet {
-        Expression object;
+        std::shared_ptr<Expression> object;
         std::string field;
-        Expression value;
+        std::shared_ptr<Expression> value;
     };
 
     struct ExprIndex {
-        Expression object;
+        std::shared_ptr<Expression> object;
         size_t index = 0;
     };
 
@@ -128,18 +129,18 @@ namespace mlang {
 
     struct StmtIf {
         Expression condition;
-        Statement thenBranch;
-        std::optional<Statement> elseBranch;
+        std::shared_ptr<Statement> thenBranch;
+        std::optional<std::shared_ptr<Statement>> elseBranch;
     };
 
     struct StmtWhile {
         Expression condition;
-        Statement thenBranch;
+        std::shared_ptr<Statement> thenBranch;
     };
 
     struct StmtMatch {
         Expression condition;
-        Statement body;
+        std::shared_ptr<Statement> body;
     };
 
     struct StmtStop{};
@@ -149,10 +150,12 @@ namespace mlang {
     struct FunctionDeclaration;
     struct StructDeclaration;
     struct EnumDeclaration;
+    struct InterfaceDeclaration;
     struct ClassDeclaration;
 
     using Declaration = std::variant<
         ImportDeclaration,
+        InterfaceDeclaration,
         FunctionDeclaration,
         StructDeclaration,
         EnumDeclaration,
@@ -212,6 +215,10 @@ namespace mlang {
         std::vector<ConstructorDeclaration> constructors;
         std::vector<FunctionDeclaration> functions;
         std::vector<Variable> variables;
+    };
+
+    struct Program {
+        std::vector<Declaration> declarations;
     };
 
 }

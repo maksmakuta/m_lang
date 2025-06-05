@@ -5,15 +5,9 @@
 #include <vector>
 
 #include "mlang/Token.hpp"
+#include "mlang/Utils.hpp"
 
 namespace mlang {
-
-    struct Position {
-        int line;
-        int column;
-
-        void newline();
-    };
 
     struct Lexem {
         Token token;

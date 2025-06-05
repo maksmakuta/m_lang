@@ -23,6 +23,8 @@ namespace mlang {
         While,
         False,
         Const,
+        Next,
+        Stop,
         Enum,
         Else,
         Null,

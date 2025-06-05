@@ -61,18 +61,13 @@ namespace mlang {
         return std::string("~!+-*/%^&|<>{}[]()=:,.").find(c) != std::string::npos;
     }
 
-    void Position::newline() {
-        line++;
-        column = 0;
-    }
-
     Lexer::Lexer(std::string& buffer) : m_buffer(buffer), pos(1,0){}
 
     std::vector<Lexem> Lexer::toTokens() {
         std::vector<Lexem> tokens;
         while (pointer < m_buffer.size()) {
             skipWhitespace();
-            char c = peek();
+            const char c = peek();
             if (std::isalpha(c) || c == '_') {
                 tokens.push_back(lexIdentifierOrKeyword());
             } else if (std::isdigit(c)) {

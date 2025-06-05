@@ -6,6 +6,7 @@
 #include "mlang/Lexer.hpp"
 #include "mlang/Parser.hpp"
 #include "mlang/Utils.hpp"
+#include "mlang/codegen/CxxGenerator.hpp"
 
 #define FILE_PATH "../examples/test.mlang"
 
@@ -28,6 +29,7 @@ int main() {
     if (!program) {
         std::cerr << "Cannot run program : internal error" << std::endl;
     }
-    std::cout << "Success!" << std::endl;
+    mlang::CxxGenerator gen;
+    gen.visit(program);
     return 0;
 }

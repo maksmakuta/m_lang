@@ -16,6 +16,8 @@ add_executable(mcc
         src/mlang/Utils.cpp
         src/mlang/Parser.cpp
         src/main.cpp
+        include/mlang/codegen/CxxGenerator.hpp
+        src/mlang/CxxGenerator.cpp
 )
 
 target_include_directories(mcc PUBLIC include)

@@ -1,5 +1,5 @@
-import "std.math"
-import "std.vec"
-import "std.arr"
-import "std.map"
-import "std.set"
+import "std.io"
+
+fn<T> main() : i32{
+
+}
