@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <map>
+#include <sstream>
 
 #include "mlang/Utils.hpp"
 
@@ -16,45 +17,162 @@ namespace mlang {
         {"std.set" , "set"},
     };
 
-    void CxxGenerator::visit(const std::shared_ptr<Program>& program) {
+    const std::map<std::string,std::string> types = {
+        {"vec" , "std::vector"},
+        {"arr" , "std::array"},
+        {"map" , "std::map"},
+        {"set" , "std::set"},
+
+        {"i8" , "signed char"},
+        {"i16" , "signed short"},
+        {"i32" , "signed int"},
+        {"i64" , "signed long"},
+
+        {"u8" , "unsigned char"},
+        {"u16" , "unsigned short"},
+        {"u32" , "unsigned int"},
+        {"u64" , "unsigned long"},
+
+        {"f32" , "float"},
+        {"f64" , "double"},
+    };
+
+
+
+    void CxxGenerator::visit( std::stringstream& ss,const std::shared_ptr<Program>& program) const {
         if (program) {
             for (const auto& item : program->declarations) {
-                std::visit(*this,item);
+                std::visit([this, &ss](const auto& node) {
+                    visit(ss,node);
+                },item);
             }
         }
     }
 
-    void CxxGenerator::operator()(const ImportDeclaration& i) const {
+    void CxxGenerator::visit( std::stringstream& ss,const ImportDeclaration& i) const {
         const bool isSystem = headers.contains(i.path);
-        std::cout << "#include ";
+        ss << "#include ";
         if (isSystem)
-            std::cout << toQuoted(headers.at(i.path),'<','>');
+            ss << toQuoted(headers.at(i.path),'<','>');
         else
-            std::cout << toQuoted(i.path,'"','"');
-        std::cout << std::endl;
+            ss << toQuoted(i.path,'"','"');
+        ss << std::endl;
     }
 
-    void CxxGenerator::operator()(const InterfaceDeclaration&){
-
-    }
-
-    void CxxGenerator::operator()(const FunctionDeclaration& f){
-        std::cout << (f.returnType ? toString(*f.returnType) : "void") << ' ' << f.name << '(';
-
-        std::cout << ") {}";
+    void CxxGenerator::visit( std::stringstream& ss, const InterfaceDeclaration&) const{
 
     }
 
-    void CxxGenerator::operator()(const StructDeclaration&){
+    void CxxGenerator::visit( std::stringstream& ss,const FunctionDeclaration& f) const{
+        ss << (f.returnType ? toString(*f.returnType) : "void") << ' ' << f.name << '(';
+
+        ss << ") {}";
 
     }
 
-    void CxxGenerator::operator()(const EnumDeclaration&){
+    void CxxGenerator::visit( std::stringstream& ss,const StructDeclaration& s) const{
+        ss << "struct " << s.name << "{" << std::endl;
+        for (const auto& i : s.fields) {
+            ss << "\t";
+            visit(ss,i);
+            ss << ";\n";
+        }
+        ss << "}";
+    }
+
+    void CxxGenerator::visit( std::stringstream& ss,const EnumDeclaration&) const{
 
     }
 
-    void CxxGenerator::operator()(const ClassDeclaration&){
+    void CxxGenerator::visit( std::stringstream& ss,const ClassDeclaration&) const{
 
+    }
+
+    void CxxGenerator::visit( std::stringstream& ss,const ExprLiteral&) const{
+
+    }
+
+    void CxxGenerator::visit( std::stringstream& ss,const ExprVariable&) const{
+
+    }
+
+    void CxxGenerator::visit( std::stringstream& ss,const ExprUnary&) const{
+
+    }
+
+    void CxxGenerator::visit( std::stringstream& ss,const ExprBinary&) const{
+
+    }
+
+    void CxxGenerator::visit( std::stringstream& ss,const ExprCall&) const{
+
+    }
+
+    void CxxGenerator::visit( std::stringstream& ss,const ExprGet&) const{
+
+    }
+
+    void CxxGenerator::visit( std::stringstream& ss,const ExprSet&) const{
+
+    }
+
+    void CxxGenerator::visit( std::stringstream& ss,const ExprIndex&) const{
+
+    }
+
+    void CxxGenerator::visit( std::stringstream& ss,const ExprInterpolation&) const{
+
+    }
+
+    void CxxGenerator::visit( std::stringstream& ss,const StmtExpr&) const{
+
+    }
+
+    void CxxGenerator::visit( std::stringstream& ss,const StmtBlock&) const{
+
+    }
+
+    void CxxGenerator::visit( std::stringstream& ss,const StmtVar&) const{
+
+    }
+
+    void CxxGenerator::visit( std::stringstream& ss,const StmtIf&) const{
+
+    }
+
+    void CxxGenerator::visit( std::stringstream& ss,const StmtWhile&) const{
+
+    }
+
+    void CxxGenerator::visit( std::stringstream& ss,const StmtMatch&) const{
+
+    }
+
+    void CxxGenerator::visit( std::stringstream& ss,const StmtStop&) const{
+
+    }
+
+    void CxxGenerator::visit( std::stringstream& ss,const StmtNext&) const{
+
+    }
+
+    void CxxGenerator::visit( std::stringstream& ss,const Type& t) const{
+        ss << (types.contains(t.name) ? types.at(t.name) : t.name);
+        if (!t.targs.empty()) {
+            ss << '<';
+            for (const auto& i : t.targs) {
+                visit(ss,i);
+            }
+            ss << '>';
+        }
+    }
+
+    void CxxGenerator::visit( std::stringstream& ss,const Variable& v) const{
+        visit(ss,v.type);
+        ss << " " << v.name;
+        if (v.value) {
+            ss << " = 0";
+        }
     }
 
 }

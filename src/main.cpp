@@ -29,7 +29,8 @@ int main() {
     if (!program) {
         std::cerr << "Cannot run program : internal error" << std::endl;
     }
-    mlang::CxxGenerator gen;
-    gen.visit(program);
+    std::stringstream ss;
+    mlang::CxxGenerator().visit(ss,program);
+    std::cout << ss.str();
     return 0;
 }

@@ -29,7 +29,7 @@ namespace mlang {
         t.name = current().text;
         inc();
 
-        if (current().token != Token::Less) {
+        if (current().token == Token::Less) {
             while (current().token != Token::Greater) {
                 if (current().token == Token::Comma) {
                     inc();
@@ -60,70 +60,34 @@ namespace mlang {
     }
 
     FunctionDeclaration Parser::parseFunction(){
-        FunctionDeclaration fun{};
-
-        fun.isAbstract = current().token == Token::Abstract;
-
-        if (!fun.isAbstract) {
-            switch(prev().token) {
-                case Token::Pub:
-                    fun.visibility = Visibility::Public;
-                    break;
-                case Token::Prot:
-                    fun.visibility = Visibility::Protected;
-                    break;
-                default:
-                    fun.visibility = Visibility::Private;
-                    break;
-            }
-        }
-
-        if (current().token != Token::Function) {
-            error("Expected 'fn', received:" + toString(current().token));
-            return {};
-        }
-        inc();
-
-        if (current().token == Token::Less) {
-            // TODO get generics parameters
-            while (current().token != Token::Greater) {
-                inc();
-            }
-            inc();
-        }
-
-        if (current().token != Token::Identifier) {
-            error("Expected function name, received:" + toString(current().token));
-            return {};
-        }
-        fun.name = current().text;
-        inc();
-
-        if (current().token != Token::BracketStart) {
-            error("Expected '(', received:" + toString(current().token));
-            return {};
-        }
-        //TODO read arguments
-        while (current().token != Token::BracketEnd) {
-            inc();
-        }
-        inc();
-
-        if (current().token == Token::Colon) {
-            inc();
-            fun.returnType = parseType();
-        }
-
-        if (!fun.isAbstract && current().token == Token::BracketCurlyStart) {
-            fun.block = parseBlock();
-            inc();
-        }
-
-        return fun;
+       return {};
     }
 
     StructDeclaration Parser::parseStruct(){
+        StructDeclaration s{};
+        inc();
 
+        if (current().token != Token::Identifier) {
+            error("Expected struct name, received: " + toString(current().token));
+            return {};
+        }
+        s.name = current().text;
+        inc();
+
+        if (current().token == Token::BracketCurlyStart) {
+            inc();
+            while (true) {
+                if (current().token == Token::BracketCurlyEnd)
+                    break;
+                s.fields.push_back(parseVar().var);
+                if (current().token == Token::Comma) {
+                    inc();
+                }
+            }
+        }
+        inc();
+
+        return s;
     }
 
     EnumDeclaration Parser::parseEnum(){
@@ -164,18 +128,82 @@ namespace mlang {
     }
 
     StmtBlock Parser::parseBlock() {
+        StmtBlock b{};
         while (current().token != Token::BracketCurlyEnd) {
-            inc();
+            b.statements.push_back(parseStatement());
         }
-        return {};
+        return b;
     }
-    StmtVar Parser::parseVar(){}
+
+    StmtVar Parser::parseVar() {
+        StmtVar v{};
+
+        switch (prev().token) {
+            case Token::Pub:
+                v.var.visibility = Visibility::Public;
+                break;
+            case Token::Prot:
+                v.var.visibility = Visibility::Protected;
+                break;
+            default:
+                v.var.visibility = Visibility::Private;
+                break;
+        }
+
+        v.var.isConst = current().token == Token::Const;
+        if (v.var.isConst) inc();
+
+        if (current().token != Token::Identifier) {
+            error("Expected variable name, received: " + toString(current().token));
+            return {};
+        }
+        v.var.name = current().text;
+        inc();
+
+        if (current().token != Token::Colon) {
+            error("Expected ':', received: " + current().text);
+            return {};
+        }
+        v.var.type = parseType();
+
+        return v;
+    }
     StmtIf Parser::parseIf(){}
     StmtWhile Parser::parseWhile(){}
+    StmtWhile Parser::parseFor() {}
     StmtMatch Parser::parseMatch(){}
-    StmtStop Parser::parseStop(){}
-    StmtNext Parser::parseNext(){}
-    Statement Parser::parseStatement(){}
+
+    StmtStop Parser::parseStop() {
+        return {};
+    }
+
+    StmtNext Parser::parseNext() {
+        return {};
+    }
+
+    Statement Parser::parseStatement() {
+        switch (current().token) {
+            case Token::Const:
+            case Token::Let:
+                return parseVar();
+            case Token::BracketCurlyStart:
+                return parseBlock();
+            case Token::If:
+                return parseIf();
+            case Token::While:
+                return parseWhile();
+            case Token::For:
+                return parseFor();
+            case Token::Match:
+                return parseMatch();
+            case Token::Stop:
+                return parseStop();
+            case Token::Next:
+                return parseNext();
+            default:
+                return parseExpr();
+        }
+    }
 
     ExprLiteral Parser::parseLiteral(){}
     ExprVariable Parser::parseVariable(){}

@@ -2,6 +2,7 @@
 #define PARSER_HPP
 
 #include <memory>
+#include <variant>
 
 #include "ast/AST.hpp"
 #include "mlang/Lexer.hpp"
@@ -29,9 +30,11 @@ namespace mlang {
         StmtVar parseVar();
         StmtIf parseIf();
         StmtWhile parseWhile();
+        StmtWhile parseFor();
         StmtMatch parseMatch();
         StmtStop parseStop();
         StmtNext parseNext();
+
         Statement parseStatement();
 
         ExprLiteral parseLiteral();

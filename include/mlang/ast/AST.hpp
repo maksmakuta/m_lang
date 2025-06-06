@@ -89,6 +89,7 @@ namespace mlang {
     };
 
     struct Variable {
+        bool isConst;
         Visibility visibility;
         std::string name;
         Type type;

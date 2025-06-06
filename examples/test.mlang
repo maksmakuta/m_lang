@@ -1,5 +1,6 @@
 import "std.io"
 
-fn<T> main() : i32{
-
+struct pair{
+    a : i32,
+    b : i32
 }
