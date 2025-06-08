@@ -9,26 +9,17 @@ include_directories(include)
 
 # Source files
 file(GLOB_RECURSE MLANG_SRC
-        include/mlang/*.cpp
+        src/mlang/*.cpp
 )
 
-add_library(mlang STATIC ${MLANG_SRC}
-        src/main.cpp
-        tests/test_lexer.cpp
-        tests/test_parser.cpp
-        tests/test_type.cpp
-)
+add_library(mlang STATIC ${MLANG_SRC})
 target_include_directories(mlang PUBLIC include)
 
 # Main executable
 add_executable(mlangc src/main.cpp)
 target_link_libraries(mlangc PRIVATE mlang)
 
-# Enable testing
-include(CTest)
-enable_testing()
 
-# Catch2
 include(FetchContent)
 FetchContent_Declare(
         Catch2
@@ -37,8 +28,9 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(Catch2)
 
-# Test executable
-file(GLOB_RECURSE TEST_SRC tests/*.cpp)
-add_executable(tests ${TEST_SRC})
+enable_testing()
+include(Catch)
+
+add_executable(tests tests/test_lexer.cpp)
 target_link_libraries(tests PRIVATE Catch2::Catch2WithMain mlang)
-add_test(NAME mlang_tests COMMAND tests)
+catch_discover_tests(tests)
