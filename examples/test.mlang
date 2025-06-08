@@ -1,6 +1,0 @@
-import "std.io"
-
-struct pair{
-    a : i32,
-    b : i32
-}
