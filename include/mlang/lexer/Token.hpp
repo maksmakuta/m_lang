@@ -30,6 +30,7 @@ namespace mlang::lexer {
         Loop,
         Next,
         Stop,
+        Struct,
         Let,
         Const,
         Override,
@@ -39,6 +40,8 @@ namespace mlang::lexer {
         False,
         Null,
         Pub,
+        This,
+        In,
         Prot,
         Priv,
         As,
@@ -46,8 +49,8 @@ namespace mlang::lexer {
         Return,
 
         //operators
-        Plus,       // +
-        Minus,      // -
+        Add,        // +
+        Sub,        // -
         Div,        // /
         Mod,        // %
         Mul,        // *
@@ -67,9 +70,6 @@ namespace mlang::lexer {
         Colon,      // :
         Question,   // ?
 
-        Grave,      // '
-        Quote,      // "
-
         BracketI,   // (
         BracketO,   // )
         BracketCI,  // {
@@ -83,8 +83,8 @@ namespace mlang::lexer {
 
         Elvis,      // ?:
 
-        PlusEq,     // +=
-        MinusEq,    // -=
+        AddEq,      // +=
+        SubEq,      // -=
         DivEq,      // /=
         ModEq,      // %=
         MulEq,      // *=

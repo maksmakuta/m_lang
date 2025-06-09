@@ -20,9 +20,11 @@ namespace mlang::lexer {
         {"stop"         , Token::Stop       },
         {"let"          , Token::Let        },
         {"const"        , Token::Const      },
+        {"this"         , Token::This       },
         {"override"     , Token::Override   },
         {"constructor"  , Token::Constructor},
         {"super"        , Token::Super      },
+        {"struct"       , Token::Struct     },
         {"true"         , Token::True       },
         {"false"        , Token::False      },
         {"null"         , Token::Null       },
@@ -31,6 +33,7 @@ namespace mlang::lexer {
         {"priv"         , Token::Priv       },
         {"as"           , Token::As         },
         {"is"           , Token::Is         },
+        {"in"           , Token::In         },
         {"return"       , Token::Return     },
 
         //operator words
@@ -40,6 +43,10 @@ namespace mlang::lexer {
         {"xor"          , Token::Xor        },
         {"shl"          , Token::Shl        },
         {"shr"          , Token::Shr        },
+        {"eq"           , Token::Eq         },
+        {"neq"          , Token::NotEq      },
+        {"inv"          , Token::Inv        },
+        {"not"          , Token::Not        },
 
     };
 
@@ -48,13 +55,53 @@ namespace mlang::lexer {
         size_t i = 0;
 
         const auto push = [&l](Token t, const std::string& v) {
-            l.emplace_back(v,t);
+            if (l.empty()) {
+                l.emplace_back(v, t);
+                return;
+            }
+
+            const Token& prevTok = l.back().token;
+
+            // Handle simple pairs
+            if (prevTok == Token::Less  && t == Token::Less)  { l.back() = {"<<",  Token::Shl};    return; }
+            if (prevTok == Token::More  && t == Token::More)  { l.back() = {">>",  Token::Shr};    return; }
+            if (prevTok == Token::Question && t == Token::Colon) { l.back() = {"?:", Token::Elvis}; return; }
+
+            // Handle compound assignments
+            if (t == Token::Assign) {
+                const std::unordered_map<Token, Lexem> compoundAssign = {
+                    {Token::Add,   {"+=", Token::AddEq}},
+                    {Token::Sub,   {"-=", Token::SubEq}},
+                    {Token::Mul,   {"*=", Token::MulEq}},
+                    {Token::Div,   {"/=", Token::DivEq}},
+                    {Token::Mod,   {"%=", Token::ModEq}},
+                    {Token::Xor,   {"^=", Token::XorEq}},
+                    {Token::And,   {"&=", Token::AndEq}},
+                    {Token::Or,    {"|=", Token::OrEq}},
+                    {Token::Less,  {"<=", Token::LessEq}},
+                    {Token::More,  {">=", Token::MoreEq}},
+                    {Token::Assign,{"==", Token::Eq}},
+                    {Token::Not,   {"!=", Token::NotEq}},
+                    {Token::Inv,   {"~=", Token::InvEq}},
+                    {Token::Shl,   {"<<=", Token::ShlEq}},
+                    {Token::Shr,   {">>=", Token::ShrEq}},
+                };
+
+                const auto it = compoundAssign.find(prevTok);
+                if (it != compoundAssign.end()) {
+                    l.back() = it->second;
+                    return;
+                }
+            }
+
+            l.emplace_back(v, t);
         };
+
 
         while (i < raw.size()) {
             switch (raw[i]) {
-                case '+': push(Token::Plus      ,"+"); break;
-                case '-': push(Token::Minus     ,"-"); break;
+                case '+': push(Token::Add      ,"+"); break;
+                case '-': push(Token::Sub     ,"-"); break;
                 case '*': push(Token::Mul       ,"*"); break;
                 case '/': push(Token::Div       ,"/"); break;
                 case '%': push(Token::Mod       ,"%"); break;
@@ -63,7 +110,7 @@ namespace mlang::lexer {
                 case '|': push(Token::Or        ,"|"); break;
                 case '<': push(Token::Less      ,"<"); break;
                 case '>': push(Token::More      ,">"); break;
-                case '=': push(Token::Eq        ,"="); break;
+                case '=': push(Token::Assign    ,"="); break;
                 case '!': push(Token::Not       ,"!"); break;
                 case '~': push(Token::Inv       ,"~"); break;
                 case '(': push(Token::BracketI  ,"("); break;
@@ -126,6 +173,7 @@ namespace mlang::lexer {
                         }else {
                             push(Token::Identifier,result);
                         }
+                        --i;
                     }
                 }
                 break;
