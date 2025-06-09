@@ -1,0 +1,83 @@
+import "std.io"
+import "std.arr"
+import "std.vec"
+
+// all structs are visible in this file
+
+//struct used as containers for data
+// all structs fields are public, and you can't hide them
+struct Vec2{
+    x : f32,
+    y : f32
+}
+
+struct Size{
+    w : f32,
+    h : f32
+}
+
+struct Rect{
+    origin : Vec2,
+    size : Size
+}
+
+// all classes are visible in this file
+
+class Canvas{
+    // constructors are public by default
+    constructor(){
+        this({640,480}) // use next constructor for default
+    }
+    // but you can make private or protected constructors as well
+    priv constructor(size : Size){
+        this.canvas_size = size //you can access inner variables through this word
+    }
+
+    // you can use that constructor in child classes only
+    prot constructor(w : i32, h : i32){
+        this.canvas_size.w = w
+        this.canvas_size.h = h
+    }
+
+    //there is no destructors, all memory management is automatic
+
+    // unlike constructors functions are private by default, so use pub modificator to declare public function
+    pub fn drawRect(rect : Rect){}
+    pub fn drawCircle(origin : Vec2, radius : f32){}
+
+    // public functions are visible to all
+    // private only for class
+    // protected visible for child
+
+    prot fn forChildren(){}
+
+    // also you can set modificator block
+    priv { // here all variables and functions are private
+        let canvas_size : Size = {0,0} // default constructor, and no need to write type twice
+    }
+
+}
+
+class TexturedCanvas : Canvas{
+    //here you can use Canvas.forChildren() method
+
+    constructor(){
+        super()
+        Canvas.forChildren() // or you can drop class name
+    }
+}
+
+// functions are visible in this file
+// use pub modificator to set it visible from other files
+pub fn callMe(){}
+
+//main function is visible by default, and no modifiers needed, but you are not allowed to run it from somewhere else
+//main can have arguments - array of strings: 'args: str...' , 'args : arr<str,32>' (where 32 is max amount for args) or 'args : vec<str>'
+//if you dont need arguments you can leave args empty as here:
+fn main(){
+    let canvas = Canvas()
+    callMe()
+    canvas.drawRect({{0,0},{128,256}})
+    canvas.drawCircle({50,50},32)
+    canvas.forChildren() // compile error
+}

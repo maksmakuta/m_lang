@@ -8,11 +8,12 @@ namespace mlang::parser {
 
     class Parser {
     public:
-        Parser() = default;
-
-        ast::Program parse(const lexer::Lexems&);
+        explicit Parser(const lexer::Lexems&);
+        ast::Program parse();
 
     private:
+
+        const lexer::Lexems& lexems;
         size_t i = 0;
     };
 
