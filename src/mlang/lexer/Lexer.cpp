@@ -20,6 +20,7 @@ namespace mlang::lexer {
         {"stop"         , Token::Stop       },
         {"let"          , Token::Let        },
         {"const"        , Token::Const      },
+        {"enum"         , Token::Enum       },
         {"this"         , Token::This       },
         {"override"     , Token::Override   },
         {"constructor"  , Token::Constructor},
@@ -87,8 +88,7 @@ namespace mlang::lexer {
                     {Token::Shr,   {">>=", Token::ShrEq}},
                 };
 
-                const auto it = compoundAssign.find(prevTok);
-                if (it != compoundAssign.end()) {
+                if (const auto it = compoundAssign.find(prevTok); it != compoundAssign.end()) {
                     l.back() = it->second;
                     return;
                 }
@@ -124,11 +124,13 @@ namespace mlang::lexer {
                 case '.': push(Token::Dot       ,"."); break;
                 case ',': push(Token::Comma     ,","); break;
                 case '"': {
+                    ++i;
                     const auto start = i;
                     while (i < raw.size() && raw[i] != '"') {
                         ++i;
                     }
                     push(Token::String, raw.substr(start,i - start));
+                    ++i;
                 }
                 break;
                 case '\'': {

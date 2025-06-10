@@ -2,6 +2,7 @@
 #define TOKEN_HPP
 
 #include <cstdint>
+#include <string>
 
 namespace mlang::lexer {
 
@@ -19,6 +20,7 @@ namespace mlang::lexer {
         // reserved words
         Abstract,
         Class,
+        Enum,
         Interface,
         Function,
         If,
@@ -103,6 +105,8 @@ namespace mlang::lexer {
         ShrEq,      // >>=
 
     };
+
+    std::string toString(Token);
 
 }
 
