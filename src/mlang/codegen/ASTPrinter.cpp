@@ -39,18 +39,23 @@ namespace mlang::codegen {
     void ASTPrinter::toString(int layer, const ast::ImportDecl& i){
         buffer << padding(layer) << "import: " << i.path << std::endl;
     }
+
     void ASTPrinter::toString(int layer, const ast::FunctionDecl&){
 
     }
+
     void ASTPrinter::toString(int layer, const ast::EnumDecl&){
 
     }
+
     void ASTPrinter::toString(int layer, const ast::InterfaceDecl&){
 
     }
+
     void ASTPrinter::toString(int layer, const ast::StructDecl&){
 
     }
+
     void ASTPrinter::toString(int layer, const ast::ClassDecl&){
 
     }

@@ -2,11 +2,6 @@
 #define PARSER_HPP
 
 #include <variant>
-#include <variant>
-#include <variant>
-#include <variant>
-#include <variant>
-#include <variant>
 
 #include "mlang/ast/AST.hpp"
 #include "mlang/lexer/Lexer.hpp"
@@ -20,18 +15,16 @@ namespace mlang::parser {
 
     private:
         // utils
-        bool isEnd() const;
-        bool isCurrent(lexer::Token token) const;
+        [[nodiscard]] bool isEnd() const;
+        [[nodiscard]] bool isCurrent(lexer::Token token) const;
 
-        lexer::Token current() const;
+        [[nodiscard]] lexer::Token current() const;
         std::string consume(lexer::Token token);
 
         void inc();
         static void error(const std::string & msg);
 
         // subtasks
-
-
         ast::ImportDecl parseImport();
         ast::FunctionDecl parseFunction();
         ast::InterfaceDecl parseInterface();

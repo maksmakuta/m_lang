@@ -27,8 +27,8 @@ void printAST(const std::string& path) {
         return;
     }
     std::cout << "Lexems: " << std::endl;
-    for (const auto& item : lexems) {
-        std::cout << mlang::lexer::toString(item.token) << " -> " << item.value << std::endl;
+    for (const auto&[value, token] : lexems) {
+        std::cout << mlang::lexer::toString(token) << " -> " << value << std::endl;
     }
 
     auto program = mlang::parser::Parser(lexems).parse();
