@@ -95,6 +95,7 @@ namespace mlang::ast {
 
     struct StructDecl {
         std::string name;
+        std::vector<Type> generics;
         std::vector<Argument> fields;
         uint8_t flags;
     };

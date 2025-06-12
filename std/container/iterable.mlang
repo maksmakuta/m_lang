@@ -1,0 +1,4 @@
+pub interface Iterable<T>{
+    fn hasNext() : bool
+    fn next() : T
+}

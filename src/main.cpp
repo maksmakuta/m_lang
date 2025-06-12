@@ -26,12 +26,7 @@ void printAST(const std::string& path) {
         std::cout << "Lexer error " << std::endl;
         return;
     }
-    std::cout << "Lexems: " << std::endl;
-    for (const auto&[value, token] : lexems) {
-        std::cout << mlang::lexer::toString(token) << " -> " << value << std::endl;
-    }
-
-    auto program = mlang::parser::Parser(lexems).parse();
+    const auto program = mlang::parser::Parser(lexems).parse();
     if (program.empty()) {
         std::cout << "Parsing error " << std::endl;
         return;
@@ -45,3 +40,4 @@ int main(){
     printAST("../examples/test.mlang");
     return 0;
 }
+

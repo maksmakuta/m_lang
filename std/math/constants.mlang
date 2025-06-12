@@ -1,0 +1,3 @@
+pub fn<T> pi() : T{
+    return as<T>(3.1415626)
+}
