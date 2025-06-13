@@ -35,7 +35,7 @@ namespace mlang::lexer {
         {"as"           , Token::As         },
         {"is"           , Token::Is         },
         {"in"           , Token::In         },
-        {"return"       , Token::Return     },
+        {"ret"          , Token::Return     },
 
         //operator words
 
@@ -64,9 +64,11 @@ namespace mlang::lexer {
             const Token& prevTok = l.back().token;
 
             // Handle simple pairs
-            if (prevTok == Token::Less  && t == Token::Less)  { l.back() = {"<<",  Token::Shl};    return; }
-            if (prevTok == Token::More  && t == Token::More)  { l.back() = {">>",  Token::Shr};    return; }
-            if (prevTok == Token::Question && t == Token::Colon) { l.back() = {"?:", Token::Elvis}; return; }
+            if (prevTok == Token::Less      && t == Token::Less ) { l.back() = {"<<",  Token::Shl};     return; }
+            if (prevTok == Token::More      && t == Token::More ) { l.back() = {">>",  Token::Shr};     return; }
+            if (prevTok == Token::Question  && t == Token::Colon) { l.back() = {"?:", Token::Elvis};    return; }
+            if (prevTok == Token::Dot       && t == Token::Dot  ) { l.back() = {"..", Token::Range};    return; }
+            if (prevTok == Token::Range     && t == Token::Dot  ) { l.back() = {"...", Token::VarArg};  return; }
 
             // Handle compound assignments
             if (t == Token::Assign) {
@@ -86,6 +88,7 @@ namespace mlang::lexer {
                     {Token::Inv,   {"~=", Token::InvEq}},
                     {Token::Shl,   {"<<=", Token::ShlEq}},
                     {Token::Shr,   {">>=", Token::ShrEq}},
+                    {Token::Range,   {"..=", Token::RangeIn}},
                 };
 
                 if (const auto it = compoundAssign.find(prevTok); it != compoundAssign.end()) {

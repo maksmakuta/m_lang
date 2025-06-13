@@ -22,7 +22,7 @@ fn binarySearch(arr: vec<i32>, target: i32): i32 {
 }
 
 fn main(args: vec<str>) {
-    let nums = vec<i32>(1, 3, 5, 7, 9, 11, 13, 15)
+    const let nums = vec<i32>(1, 3, 5, 7, 9, 11, 13, 15)
     let target = 7
     let result = binarySearch(nums, target)
 

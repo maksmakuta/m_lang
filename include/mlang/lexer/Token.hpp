@@ -100,9 +100,12 @@ namespace mlang::lexer {
         XorEq,      // ^=
         AndEq,      // &=
         OrEq,       // |=
+        Range,      // ..
 
         ShlEq,      // <<=
         ShrEq,      // >>=
+        RangeIn,    // ..=
+        VarArg,     // ...
 
     };
 

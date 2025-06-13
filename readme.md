@@ -1,7 +1,9 @@
 # mLang
 
-mlang is a programming language that mixes Kotlin and Rust syntax with OOP, functional and imperative patterns. Currently working on translator to C++, later can be added more features as interpreter, VM or compilation to native platforms.
- 
+Experimental programming languages that mixes Kotlin and Rust features with simplicity and productivity in mind
+
+ | [Docs](./docs/mlang.md) | [Examples](./examples) | 
+
 ### What's working?
 
  - [x] Lexing
