@@ -1,22 +1,7 @@
-
-fn main(){
-    for(i : i32 in 0 .. 5){
-        println(i)
-    }
-
-    let data = vec<i32>()
-
-    for(i : i32 in 56 .. 95){ // for(int i = 56; i < 95; ++i)
-        data.push(i)
-    }
-
-    for(i : i32 in 0 ..= 9){ // for(int i = 0; i <= 9; ++i)
-        data.push(i)
-    }
-
-    for(i : i32 in data){
-        println(i)
-    }
-
-}
-
+fn a(){}
+fn b(arg : i32){}
+fn c(arg0: i32, arg1 : i32){}
+fn<T> d(){}
+fn<T> e(arg : T){}
+fn<T> f(arg0: T, arg1 : T){}
+fn<T : Number> g(t : T){}
