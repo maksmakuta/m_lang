@@ -1,7 +1,4 @@
-fn a(){}
-fn b(arg : i32){}
-fn c(arg0: i32, arg1 : i32){}
-fn<T> d(){}
-fn<T> e(arg : T){}
-fn<T> f(arg0: T, arg1 : T){}
-fn<T : Number> g(t : T){}
+import "lol"
+import "kek"
+import "fun"
+import "ast"

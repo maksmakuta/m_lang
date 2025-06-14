@@ -12,18 +12,20 @@ namespace mlang::parser {
         ast::Program parse();
 
     private:
-        ast::Declaration parseDecl();
-        ast::ImportDecl parseImport();
-        ast::FunctionDecl parseFunction();
-        ast::InterfaceDecl parseInterface();
-        ast::EnumDecl parseEnum();
-        ast::ClassDecl parseClass();
+        ast::Declaration parseDeclaration();
+        ast::Interface parseInterface();
+        ast::Function parseFunction();
+        ast::Import parseImport();
+        ast::Class parseClass();
+        ast::Enum parseEnum();
 
         [[nodiscard]] bool isEnd() const;
-        [[nodiscard]] bool check(lexer::Token);
+        [[nodiscard]] bool is(const std::initializer_list<lexer::Token>&) const;
+        [[nodiscard]] bool is(lexer::Token token) const;
         [[nodiscard]] lexer::Lexem current() const;
-        void advance();
-        void expect(lexer::Token);
+
+        bool isNext(lexer::Token token);
+        void consume(lexer::Token);
 
         const lexer::Lexems& lexems;
         size_t i = 0;

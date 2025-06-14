@@ -19,7 +19,6 @@ target_include_directories(mlang PUBLIC include)
 add_executable(mlangc src/main.cpp)
 target_link_libraries(mlangc PRIVATE mlang)
 
-
 include(FetchContent)
 FetchContent_Declare(
         Catch2

@@ -32,8 +32,7 @@ void printAST(const std::string& path) {
         return;
     }
 
-    mlang::codegen::ASTPrinter printer(program);
-    std::cout << std::endl << std::endl << printer.toString() << std::endl;
+    std::cout << mlang::codegen::ASTPrinter().toString(program) << std::endl;
 }
 
 int main(){

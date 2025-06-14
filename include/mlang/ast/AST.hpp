@@ -1,7 +1,6 @@
 #ifndef AST_HPP
 #define AST_HPP
 
-#include <cstdint>
 #include <optional>
 #include <string>
 #include <variant>
@@ -9,91 +8,97 @@
 
 namespace mlang::ast {
 
-    enum Visibility : uint8_t {
-        Public      = 0,
-        Private     = 1,
-        Protected   = 2,
+    enum class Visibility {
+        Private,    // pub
+        Public,     // priv - by default
+        Protected   // prot
     };
 
-    enum Flag : uint8_t {
-        isConst     = 1 << 3,
-        isAbstract  = 1 << 4,
-        isNullable  = 1 << 5,
-        isVararg    = 1 << 6,
-    };
-
+    // Base<Generic1,Generic2, ...> : Inherit1,Inherit2,...
     struct Type {
         std::string base;
         std::vector<Type> generics;
         std::vector<Type> inherits;
     };
 
-    struct Expr {};
-    struct Block{};
-
+    // name : type [= value]
     struct Argument {
         std::string name;
         Type type;
-        std::optional<Expr> value;
+        std::optional<std::string> value;
     };
 
+    // let name : type = value
     struct Variable {
         Visibility visibility;
         std::string name;
         Type type;
-        std::optional<Expr> value;
-        uint8_t flags;
+        std::optional<std::string> value;
     };
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    struct ImportDecl {
+    // import "path"
+    struct Import {
         std::string path;
     };
 
-    struct FunctionDecl {
-        std::string name;
+    // fn<T> name(arg : T) : T{}
+    struct Function {
         Visibility visibility;
+        std::string name;
         std::vector<Type> generics;
-        std::vector<Argument> arguments;
+        std::vector<Argument> args;
         std::optional<Type> returns;
-        std::optional<Block> body;
-        uint8_t flags;
     };
 
-    struct EnumDecl {
+    // item = 45,
+    struct EnumItem{
         std::string name;
-        Visibility visibility;
-        std::vector<Argument> items;
-        uint8_t flags;
+        std::optional<std::string> value;
     };
 
-    struct InterfaceDecl {
-        std::string name;
+    // enum name{ item = 2, lol = "kek" }
+    struct Enum {
         Visibility visibility;
+        std::string name;
+        std::vector<EnumItem> items;
+    };
+
+    // struct<T,U> name{ field : T, field2 : U, ... }
+    struct Struct {
+        Visibility visibility;
+        std::string name;
         std::vector<Type> generics;
-        std::vector<FunctionDecl> functions;
-        uint8_t flags;
+        std::vector<Argument> fields;
     };
 
-    struct ClassDecl {
-        std::string name;
+    // interface<T,U> name{ fn method() : T fn method2() : U, ... }
+    struct Interface {
         Visibility visibility;
+        std::string name;
         std::vector<Type> generics;
-        std::vector<FunctionDecl> functions;
+        std::vector<Function> methods;
+    };
+
+    // class<T,U> name{ constructor(){}, ... fn method() : T fn method2() : U, ... prot let field : T  pub let field2 : U = 0, ... }
+    struct Class {
+        Visibility visibility;
+        std::string name;
+        std::vector<Type> generics;
+        std::vector<Function> methods;
         std::vector<Variable> variables;
-        uint8_t flags;
     };
 
     using Declaration = std::variant<
-        ImportDecl,
-        EnumDecl,
-        FunctionDecl,
-        InterfaceDecl,
-        ClassDecl
+        Import,
+        Function,
+        Enum,
+        Struct,
+        Interface,
+        Class
     >;
 
     using Program = std::vector<Declaration>;
 
 }
+
 #endif //AST_HPP
