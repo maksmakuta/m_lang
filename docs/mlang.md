@@ -1,3 +1,0 @@
-# mlang
-
- - [Types](./types.md)
