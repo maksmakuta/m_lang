@@ -1,0 +1,28 @@
+import "container/array"
+import "random"
+import "io"
+
+struct Data{
+    integer : i32,
+    real : f32,
+    string : str,
+    array : Array<i32,8>
+}
+
+fn randomData() : Data{
+    val rand = Random()
+    return Data(
+        rand.nextI32(),
+        rand.nextF32(),
+        rand.nextUUID().toString(),
+        rand.nextI32Array<8>()
+    )
+}
+
+fn main(){
+    val data = randomData()
+    println("Data has integer:  ${data.integer}")
+    println("Data has real:  ${data.real}")
+    println("Data has string:  ${data.string}")
+    println("Data has array:  ${toArrayString(data.array)}")
+}

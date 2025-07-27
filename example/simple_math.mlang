@@ -1,0 +1,19 @@
+import "io"
+
+fn main(){
+    val a = read<i32>("Enter a: ")
+    val b = read<i32>("Enter b: ")
+    val c = read<i32>("Enter c: ")
+
+    val d = b * b - 4 * a * c
+    println("D = ${d}")
+
+    if(d < 0){
+        println("No roots")
+    }else if( d == 0){
+        println("R = ${(-b) + sqrt(D) / 2 * a}")
+    }else{
+        println("R1 = ${(-b) + sqrt(D) / 2 * a}")
+        println("R2 = ${(-b) - sqrt(D) / 2 * a}")
+    }
+}
