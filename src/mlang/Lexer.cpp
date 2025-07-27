@@ -8,6 +8,8 @@ namespace mlang {
         {"fn"       ,FUNCTION},
         {"var"      ,VAR},
         {"val"      ,VAL},
+        {"true"     ,TRUE},
+        {"false"    ,FALSE},
         {"import"   ,IMPORT},
         {"struct"   ,STRUCT},
     };
@@ -24,7 +26,6 @@ namespace mlang {
         const auto checkNext = [&i, &input, &pos](char c) {
             if (input[i+1] == c) {
                 i++;
-                pos.second++;
                 return true;
             }
             return false;
@@ -32,11 +33,13 @@ namespace mlang {
 
         while (i < input.size()) {
             const char c = input[i];
+            if (c == '\n') {
+                pos.first++;
+                pos.second = 1;
+            }
             switch (c) {
                 case ' ':
                 case '\n':
-                    pos.first++;
-                    pos.second = 1;
                 case '\t':
                 case '\r':
                     break;
@@ -46,7 +49,16 @@ namespace mlang {
                 case '+': checkNext('=') ? push(PLUS_EQ     ) : push(PLUS    ); break;
                 case '-': checkNext('=') ? push(MINUS_EQ    ) : push(MINUS   ); break;
                 case '*': checkNext('=') ? push(MULTIPLY_EQ ) : push(MULTIPLY); break;
-                case '/': checkNext('=') ? push(DIVIDE_EQ   ) : push(DIVIDE  ); break;
+                case '/': {
+                        if (input[i+1] == '/') {
+                            while (input[i+1] != '\n') {
+                                i++;
+                            }
+                        }else{
+                            checkNext('=') ? push(DIVIDE_EQ) : push(DIVIDE);
+                        }
+                    }
+                    break;
                 case '%': checkNext('=') ? push(MOD_EQ      ) : push(MOD     ); break;
                 case '|': checkNext('=') ? push(OR_EQ   ) : push(OR ); break;
                 case '&': checkNext('=') ? push(AND_EQ  ) : push(AND); break;
@@ -67,10 +79,8 @@ namespace mlang {
                     i++;
                     while (input[i] != '"') {
                         i++;
-                        pos.second++;
                     }
                     i++;
-                    pos.second++;
                     tokens.emplace_back(STRING, input.substr(start, i-start), pos);
                     i--;
                 }
@@ -93,15 +103,12 @@ namespace mlang {
                         const auto start = i;
                         while (isxdigit(input[i])) {
                             i++;
-                            pos.second++;
                         }
                         if (input[i] == '.') {
                             is_real = true;
                             i++;
-                            pos.second++;
                             while (isxdigit(input[i])) {
                                 i++;
-                                pos.second++;
                             }
                         }
                         tokens.emplace_back(is_real ? REAL : INT, input.substr(start, i-start), pos);
@@ -109,8 +116,8 @@ namespace mlang {
                 }
             }
 
-            pos.second++;
             i++;
+            pos.second++;
         }
 
         return tokens;
