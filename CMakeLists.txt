@@ -6,15 +6,5 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(mcc
-        src/mlang/AST.hpp
-        src/mlang/AstPrinter.hpp
-        src/mlang/Lexem.hpp
-        src/mlang/Lexer.hpp
-        src/mlang/Parser.hpp
-
-        src/mlang/AstPrinter.cpp
-        src/mlang/Lexem.cpp
-        src/mlang/Lexer.cpp
-        src/mlang/Parser.cpp
-
-        src/main.cpp)
+        src/main.cpp
+)
