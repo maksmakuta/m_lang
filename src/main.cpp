@@ -14,7 +14,7 @@ void compile(const std::string& source) {
 
     std::string buffer;
     while (std::getline(file,buffer)) {
-        std::cout << "input: " << buffer << std::endl;
+        //std::cout << "input: " << buffer << std::endl;
 
         const auto tokens = lexer.tokenize(buffer);
         for (const auto& token : tokens) {

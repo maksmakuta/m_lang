@@ -1,3 +1,10 @@
 import "io"
 
-fn main(){}
+fn main(){
+    // simple loop
+    for(i : i32 in range(0,9)){
+        println(i) //print numbers from  to 9
+    }
+}
+
+++ -- -= == !+= '9' 22.55

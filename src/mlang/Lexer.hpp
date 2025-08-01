@@ -23,7 +23,7 @@ namespace mlang {
         Token getChar();
         Token getIdentifier();
 
-        [[nodiscard]] bool isNext(char c) const;
+        bool isNext(char c);
 
         std::string source;
         uint32_t index{0};

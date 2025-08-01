@@ -13,7 +13,7 @@ namespace mlang {
             "FUNCTION", "ENUM", "STRUCT", "INTERFACE", "CLASS",
             "ABSTRACT", "PUBLIC", "PRIVATE", "PROTECTED", "OVERRIDE",
             "VAL", "VAR", "FOR", "WHILE", "DO", "MATCH", "LOOP",
-            "IF", "ELSE", "IMPORT", "RETURN", "NEXT", "STOP",
+            "IF", "ELSE", "IMPORT", "RETURN", "NEXT", "STOP", "IN",
 
             "PLUS", "MINUS", "MULTIPLY", "DIVIDE", "MODULO",
             "AND", "OR", "NOT", "XOR", "INV",
@@ -27,6 +27,7 @@ namespace mlang {
 
             "INC", "DEC",
             "TRUE", "FALSE",
+            "COLON", "COMMA", "DOT",
 
             "LBRACE", "RBRACE", "LPAREN", "RPAREN", "LBRACK", "RBRACK",
 
