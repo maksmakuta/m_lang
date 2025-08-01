@@ -87,7 +87,8 @@ namespace mlang {
                         if (isNext('=')) {
                             put(SHR_EQ);
                         }else put(SHR);
-                    }else {
+                    }
+                    else {
                         if (isNext('=')) {
                             put(GREAT_EQ);
                         } else put(GREAT);
