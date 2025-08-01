@@ -1,0 +1,7 @@
+import "list"
+
+fn main(args : list<str>){
+    for(arg : str in args){
+        println(arg)
+    }
+}

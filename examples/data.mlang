@@ -1,0 +1,28 @@
+import "io"
+import "array"
+
+struct UUID{
+    var data : array<u8,16>
+}
+
+fn toString(uuid : UUID) : str {
+    var string = ""
+    for( byte : u8 in uuid.data){
+        string += toHexString(byte).uppercase()
+    }
+    return string
+}
+
+fn generateUUID() : UUID{
+    val rand = Random()
+    var data = array<u8,16>(0)
+    for(i : u32 in range(0,15)){
+        data[i] = rand.nextU8()
+    }
+    return UUID(item)
+}
+
+fn main(){
+    val uuid = generateUUID()
+    println(uuid) // it uses toString function to convert object to string
+}

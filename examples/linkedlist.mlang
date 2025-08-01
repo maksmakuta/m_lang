@@ -1,0 +1,103 @@
+import "io"
+
+interface Iterator<T> {
+    fn hasNext(): Bool
+    fn next(): T
+}
+
+interface Iterable<T> {
+    fn iterator(): Iterator<T>
+}
+
+interface Collection<T> : Iterable<T> {
+    fn size(): Int
+    fn isEmpty(): Bool
+}
+
+interface MutableCollection<T> : Collection<T> {
+    fn add(value: T)
+}
+
+pub class Node<T> {
+    val value: T
+    var next: Node<T>? = null
+
+    pub constructor(value: T) {
+        this.value = value
+    }
+}
+
+pub class LinkedListIterator<T>: Iterator<T> {
+    var current: Node<T>?
+
+    pub constructor(start: Node<T>?) {
+        this.current = start
+    }
+
+    pub fn hasNext(): Bool {
+        return current.next != null
+    }
+
+    pub fn next(): T {
+        if (current.next == null) panic("No more elements")
+        val value = current.value
+        current = current.next
+        return value
+    }
+}
+
+pub class LinkedList<T> : MutableCollection<T> {
+    var head: Node<T>? = null
+    var tail: Node<T>? = null
+    var _size: u32 = 0
+
+    pub fn add(value: T): Void {
+        val node = Node(value)
+        if (head == null) {
+            head = node
+            tail = node
+        } else {
+            tail.next = node
+            tail = node
+        }
+        _size++
+    }
+
+    pub fn iterator(): Iterator<T> {
+        return LinkedListIterator<T>(head)
+    }
+
+    pub fn isEmpty(): bool {
+        return _size == 0
+    }
+
+    pub fn size(): i32 {
+        return as<i32>(_size)
+    }
+
+    pub fn toString() : str{
+        var string = "["
+        for(item : T in this){
+            string += toString(item)
+            if(!isLast(item)){
+                string += ", "
+            }
+        }
+        string += "]"
+        return string
+    }
+}
+
+fn main(){
+    val list = LinkedList<i32>()
+    list.add(1)
+    list.add(2)
+    list.add(3)
+
+    println(list) // uses LinkedList<T>.toString() to print internal data
+
+    list.add(5)
+
+    println(list)
+}
+
