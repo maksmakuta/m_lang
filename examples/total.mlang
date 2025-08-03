@@ -1,0 +1,48 @@
+import {
+    "math", "list", "algorithm"
+}
+import "memory"
+
+interface Test{
+    fn foo()
+    fn bar() : i32
+    fn foobar(int : i32) : i32
+}
+
+interface<T> Flow{
+    fn push(item : T)
+    fn last() : T
+}
+
+abstract class Shape{
+    abstract fn getArea() : f32
+}
+
+class Circle : Shape{
+
+    constructor(r : f32){
+        radius = r
+    }
+
+    override fn getArea() : f32{
+        return 2.f * math.PI * radius
+    }
+
+    priv var radius : f32 = 1.f
+
+}
+
+struct<A,B> Pair{
+    var first : A,
+    var second : B
+}
+
+fn<A,B> pairOf(a : A, b : B) : Pair<A,B>{
+    return Pair<A,B>(a,b)
+}
+
+fn main() {
+    val user = "User"
+    println("Hello, ${user}")
+}
+
